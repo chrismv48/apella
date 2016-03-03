@@ -1,27 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Router, Route, IndexRoute, browserHistory } from "react-router";
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import rootReducer from './reducers'
+import App from './components/App'
 
-import { Base } from "./components/Base";
-import { IssuesView } from "./views/IssuesView";
-import { IssueView } from "./views/IssueView";
-import { SubmitProposalView } from "./views/SubmitProposalView";
-import { MyProposalsView } from "./views/MyProposalsView";
-import { FAQView } from "./views/FAQView";
-import { DonateView } from "./views/DonateView";
+let store = createStore(rootReducer);
 
 
-const app = document.getElementById("app");
-ReactDOM.render(
-    <Router history={browserHistory}>
-        <Route path="/" component={Base}>
-            <IndexRoute component={IssuesView}/>
-            <Route path="issues" component={IssuesView}/>
-            <Route path="issue/:issueId" component={IssueView}/>
-            <Route path="submit-proposal" component={SubmitProposalView}/>
-            <Route path="my-proposals" component={MyProposalsView}/>
-            <Route path="faq" component={FAQView}/>
-            <Route path="donate" component={DonateView}/>
-        </Route>
-    </Router>
-    , app);
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+);
+

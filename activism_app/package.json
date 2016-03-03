@@ -1,5 +1,5 @@
 {
-  "name": "react-tutorials",
+  "name": "activism",
   "version": "0.0.0",
   "description": "",
   "main": "webpack.config.js",
@@ -14,14 +14,18 @@
     "babel-preset-stage-0": "^6.3.13",
     "history": "^1.17.0",
     "react": "^0.14.6",
+    "react-bootstrap": "^0.28.3",
     "react-dom": "^0.14.6",
+    "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
+    "react-router-bootstrap": "^0.20.1",
+    "redux": "^3.3.1",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot",
+    "dev": "webpack-dev-server --content-base src --inline --hot --history-fallback-api",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
