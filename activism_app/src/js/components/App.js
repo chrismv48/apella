@@ -1,12 +1,13 @@
 import React from 'react'
 import rootReducer from '../reducers/index'
-import IssueList from '../containers/IssueList'
+import AppNavBar from './AppNavbar'
+import IssuesView from './IssuesView'
 
 const App = () => (
-  <div className="app">
-    <IssueList />
+  <div className="container">
+    <AppNavBar />
+    <IssuesView />
   </div>
 );
 
 export default App;
-

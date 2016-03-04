@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Issue from './../components/Issue'
 import { connect } from 'react-redux'
-import setSortOption from '../actions/index'
+import { setSortOption, fetchIssues } from '../actions/index'
 import IssueSortButtons from '../components/IssueSortButtons'
 
 
@@ -20,7 +20,9 @@ const sortIssues = (issues, sortOption) => {
 
 class IssueList extends Component {
 
+
   renderIssues(issues, sortOption) {
+    console.log(issues);
     return sortIssues(issues, sortOption).map((issue) => {
       return (
         <Issue key={issue.id} { ...issue } />
@@ -40,10 +42,10 @@ class IssueList extends Component {
 }
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ issues, sortOption }) {
   return {
-    issues: state.issues,
-    sortOption: state.sortOption
+    issues,
+    sortOption
   };
 }
 

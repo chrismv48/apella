@@ -3,7 +3,7 @@ const issueSortOptionReducer = (state = "SUPPORTERS", action) => {
     case 'SET_SORT_OPTION':
       return action.sortOption;
     default:
-      return state
+      return state;
   }
 };
 

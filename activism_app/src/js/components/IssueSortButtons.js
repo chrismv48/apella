@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, ButtonToolbar } from 'react-bootstrap'
+import { Button, ButtonToolbar, Row, Col } from 'react-bootstrap'
 
 const IssueSortButtons = ({ sortOption, onSetSortOption, props }) => (
 
