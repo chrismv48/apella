@@ -17,6 +17,7 @@ Homepage View
 - Add issue search
 
 Data Models
+- Add ability to filter, sort, paginate, etc
 - Add tags/categories
 - Add locality
 
@@ -29,9 +30,6 @@ Actions View
 - Decide if analytics are included (stub out in beginning?)
 - Figure out how to integrate with social media API's
 
-Create Issue View
-- Wireframe
-- Decide where entry point(s) is/are
 
 User View (personal)
 - Wireframe

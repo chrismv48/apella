@@ -22,7 +22,6 @@ class IssueList extends Component {
 
 
   renderIssues(issues, sortOption) {
-    console.log(issues);
     return sortIssues(issues, sortOption).map((issue) => {
       return (
         <Issue key={issue.id} { ...issue } />

@@ -12,7 +12,6 @@ export const setSortOption = (sortOption) => (
 
 
 export function fetchIssues() {
-  console.log('Fetching data!');
   const url = 'http://127.0.0.1:5000/proposal';
   const request = axios.get(url);
   return {

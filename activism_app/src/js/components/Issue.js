@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router'
+
 
 const Issue = (issue) => (
   <div className="media" id="issue">
@@ -6,7 +8,9 @@ const Issue = (issue) => (
       <span>{issue.supporters}</span>
     </div>
     <div className="media-body">
-      <h4 className="media-heading">{issue.title}</h4>
+      <Link to={`/issue/${issue.id}`}>
+        <h4 className="media-heading">{issue.title}</h4>
+      </Link>
       {issue.description}
       <small>
         <ul className="list-inline">
