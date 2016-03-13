@@ -1,3 +1,5 @@
+//TODO: consider making this a dumb component and inheriting stuff from IssuesView
+
 import React, { Component } from 'react'
 import Issue from './../components/Issue'
 import { connect } from 'react-redux'

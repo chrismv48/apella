@@ -27,7 +27,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "webpack-dev-server --content-base src --inline --hot --history-fallback-api",
+    "dev": "webpack-dev-server --content-base src --inline --hot --history-api-fallback",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

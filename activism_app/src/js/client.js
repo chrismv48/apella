@@ -16,9 +16,9 @@ render(
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={IssuesView}/>
-        <Route path="issues" component={IssuesView}/>
-        <Route path="issue/:issueId" component={IssueView}/>
-        <Route path="issue" component={IssueView}>
+        <Route path="/issues" component={IssuesView}/>
+        <Route path="/issue/:issueId" component={IssueView}/>
+        <Route path="/issue" component={IssueView}>
           <Route path="*" component={IssueView}/>
         </Route>
       </Route>
