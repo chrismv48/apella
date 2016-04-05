@@ -1,31 +1,73 @@
-import axios from 'axios'
-
-export const SET_SORT_OPTION = 'SET_SORT_OPTION';
-export const FETCH_ISSUES = 'FETCH_ISSUES';
-export const FETCH_ISSUE = 'FETCH_ISSUE';
-
-export const setSortOption = (sortOption) => (
-{
-  type: SET_SORT_OPTION,
-  sortOption
-}
-);
+import * as actions from './action_constants'
 
 
-export function fetchIssues() {
-  const url = 'http://127.0.0.1:5000/proposal';
-  const request = axios.get(url);
+export const setSortOption = (sortOption) => {
   return {
-    type: FETCH_ISSUES,
-    payload: request
-  };
-}
+    type: actions.SET_SORT_OPTION,
+    sortOption
+  }
+};
 
-export function fetchIssue(proposal_id) {
-  const url = `http://127.0.0.1:5000/proposal/${proposal_id}`;
-  const request = axios.get(url);
+// thunk async action
+export const fetchProposals = () => {
+  console.log('fetchProposals');
+  return (dispatch) => {
+    const url = 'http://127.0.0.1:5000/proposal';
+    dispatch(fetchingProposals());
+    return makeApiRequest(url)
+      .then((responseJson) => dispatch(receiveProposals(responseJson)))
+  }
+};
+
+export const fetchingProposals = () => {
+  console.log('fetching Proposals');
   return {
-    type: FETCH_ISSUE,
-    payload: request
-  };
-}
+    type: actions.FETCHING_PROPOSALS
+  }
+};
+
+export const receiveProposals = (responseJson) => {
+  console.log('receiving Proposals');
+  return {
+    type: actions.RECEIVE_PROPOSALS,
+    proposals: responseJson
+  }
+};
+
+export const fetchProposal = (proposalId) => {
+  console.log('fetchProposals');
+  return (dispatch) => {
+    const url = `http://127.0.0.1:5000/proposal/${proposalId}`;
+    dispatch(fetchingProposal());
+    return makeApiRequest(url)
+      .then((responseJson) => dispatch(receiveProposal(responseJson)))
+  }
+};
+
+export const fetchingProposal = () => {
+  console.log('fetching Proposals');
+  return {
+    type: actions.FETCHING_PROPOSAL
+  }
+};
+
+export const receiveProposal = (responseJson) => {
+  console.log('receiving Proposals');
+  return {
+    type: actions.RECEIVE_PROPOSAL,
+    selectedProposal: responseJson
+  }
+};
+
+export const makeApiRequest = (url, method = 'get') => {
+  return fetch(url, {
+    method,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+    .then((response) => {
+      return response.json();
+    })
+};

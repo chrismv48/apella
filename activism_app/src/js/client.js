@@ -1,25 +1,32 @@
+import thunk from 'redux-thunk'
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { Router, Route, IndexRoute, browserHistory, hashHistory } from "react-router"
-import { createStore, applyMiddleware } from 'redux';
-import promiseMiddleware from 'redux-promise';
-import rootReducer from './reducers'
+import { Router, Route, IndexRoute, browserHistory } from "react-router"
+import { createStore, applyMiddleware, compose } from 'redux'
+import appReducer from './reducers/index'
 import App from './components/App'
-import IssuesView from './components/IssuesView'
-import IssueView from './components/IssueView'
+import ProposalsView from './components/ProposalsView'
+import ProposalView from './components/ProposalView'
 
-const createStoreWithMiddleware = applyMiddleware(promiseMiddleware)(createStore);
+const finalCreateStore = compose(
+  applyMiddleware(thunk),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+)(createStore);
 
+const store = finalCreateStore(appReducer);
+console.log(appReducer);
+console.log(store);
+//let store = applyMiddleware(thunk)(createStore)(appReducer);
 render(
-  <Provider store={createStoreWithMiddleware(rootReducer)}>
+  <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
-        <IndexRoute component={IssuesView}/>
-        <Route path="/issues" component={IssuesView}/>
-        <Route path="/issue/:issueId" component={IssueView}/>
-        <Route path="/issue" component={IssueView}>
-          <Route path="*" component={IssueView}/>
+        <IndexRoute component={ProposalsView}/>
+        <Route path="/proposals" component={ProposalsView}/>
+        <Route path="/proposal/:proposalId" component={ProposalView}/>
+        <Route path="/proposal" component={ProposalView}>
+          <Route path="*" component={ProposalView}/>
         </Route>
       </Route>
     </Router>
