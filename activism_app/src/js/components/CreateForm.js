@@ -1,6 +1,29 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import { Premise } from './Premise'
+import Premise from './Premise'
+
+
+function nestComments(commentList) {
+  const commentMap = {};
+
+  // move all the comments into a map of id => comment
+  commentList.forEach(comment => commentMap[comment.premise_id] = comment);
+
+  // iterate over the comments again and correctly nest the children
+  commentList.forEach(comment => {
+    comment.children = [];
+    if(comment.parent_premise_id !== null) {
+      const parent = commentMap[comment.parent_premise_id];
+      parent.children = (parent.children || []);
+      parent.children.push(comment);
+    }
+  });
+
+  // filter the list to return a list of correctly nested comments
+  return commentList.filter(comment => {
+    return comment.parent_premise_id === null;
+  });
+}
 
 export default class CreateForm extends Component {
 
@@ -12,39 +35,6 @@ export default class CreateForm extends Component {
       parentPremiseId: null,
       premiseDescription: null
     };
-
-    this.premiseNodes = [
-      {
-        id: 1,
-        children: [
-          {
-            id: 5,
-            children: []
-          },
-          {
-            id: 3,
-            children: [
-              {
-                id: 6,
-                children: []
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 4,
-        children: []
-      },
-      {
-        id: 2,
-        children: [
-          {id: 88,
-          children: []}
-        ]
-      }
-    ]
-
   }
 
   handlePremiseNameChange(premiseName) {
@@ -99,10 +89,10 @@ export default class CreateForm extends Component {
         <button onClick={() => this.handleSubmit()}>Add Premise</button>
         <div>
           <div>
-            {this.premiseNodes.map((premise) => {
+            {nestComments(this.props.premiseNodes).map((premise) => {
               premise.depth = 0;
               return (
-                <Premise key={premise.id} premise={premise} depth={0}/>
+                <Premise key={premise.premise_id} premise={premise} depth={0}/>
               );
             })
             }

@@ -8,7 +8,7 @@ const Premise = ({ premise, depth }) => {
   return (
     <ul>
       <li>
-        {premise.id}
+        {premise.premise_id} - {depth}
         {nestedPremises}
       </li>
     </ul>
