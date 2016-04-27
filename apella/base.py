@@ -2,7 +2,7 @@
 from flask_restful import Resource, abort
 from sqlalchemy.exc import IntegrityError
 from flask import request
-from models import db
+from apella import db
 from datetime import datetime
 import json
 
@@ -16,10 +16,9 @@ class BaseResource(Resource):
         if id:
             results = self.model_class.query.get(id)
             if not results:
-                abort(404, message="Object {} not found".format(id))
+                abort(404, message="{} {} not found".format(self.model_name, id))
             return self.model_class.query.get(id).as_dict()
         else:
-
             return {self.model_name:
                         [result.as_dict(self.associated_objects) for result in self.model_class.query.all()]}
 

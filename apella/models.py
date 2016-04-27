@@ -1,4 +1,5 @@
 import json
+from sqlalchemy import ForeignKeyConstraint, UniqueConstraint
 from apella import db
 from datetime import datetime
 from base import SerializedModel
@@ -6,7 +7,6 @@ from base import SerializedModel
 
 class Proposal(db.Model, SerializedModel):
     __tablename__ = "proposal"
-    __table_args__ = {'schema': 'apella'}
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.now, index=True)
@@ -21,7 +21,6 @@ class Proposal(db.Model, SerializedModel):
 
 class User(db.Model, SerializedModel):
     __tablename__ = "user"
-    __table_args__ = {'schema': 'apella'}
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.now, index=True)
@@ -38,30 +37,28 @@ class User(db.Model, SerializedModel):
 
 class ProposalAction(db.Model, SerializedModel):
     __tablename__ = "proposal_action"
-    __table_args__ = {'schema': 'apella'}
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     action = db.Column(db.String, nullable=False, index=True)
     date_created = db.Column(db.DateTime, default=datetime.now, index=True)
-    proposal_id = db.Column(db.Integer, db.ForeignKey('apella.proposal.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('apella.user.id'))
+    proposal_id = db.Column(db.Integer, db.ForeignKey('proposal.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     proposal = db.relationship('Proposal', backref=db.backref('proposal_action'))
     user = db.relationship('User', backref=db.backref('proposal_action'))
 
 conclusion_premise = db.Table('conclusion_premise',
-                              db.Column('conclusion_id', db.Integer, db.ForeignKey('apella.conclusion.id')),
-                              db.Column('premise_id', db.Integer, db.ForeignKey('apella.premise.id')),
+                              db.Column('conclusion_id', db.Integer, db.ForeignKey('conclusion.id')),
+                              db.Column('premise_id', db.Integer, db.ForeignKey('premise.id')),
                               )
 
 source_premise = db.Table('source_premise',
-                          db.Column('source_id', db.Integer, db.ForeignKey('apella.source.id')),
-                          db.Column('premise_id', db.Integer, db.ForeignKey('apella.premise.id')),
+                          db.Column('source_id', db.Integer, db.ForeignKey('source.id')),
+                          db.Column('premise_id', db.Integer, db.ForeignKey('premise.id')),
                           )
 
 class Conclusion(db.Model, SerializedModel):
     __tablename__ = "conclusion"
-    __table_args__ = {'schema': 'apella'}
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.now, index=True)
@@ -76,10 +73,28 @@ class Conclusion(db.Model, SerializedModel):
                                secondary=conclusion_premise,
                                backref=db.backref('conclusions', lazy='dynamic'))
 
+class PremiseNode(db.Model, SerializedModel):
+    __tablename__ = "premise_node"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ['conclusion_id', 'parent_premise_id'],
+            ['premise_node.conclusion_id', 'premise_node.premise_id']
+        ),
+        UniqueConstraint('conclusion_id', 'premise_id', name='foo')
+    )
+
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    conclusion_id = db.Column(db.Integer, db.ForeignKey('conclusion.id'))
+    premise_id = db.Column(db.Integer, db.ForeignKey('premise.id'))
+    parent_premise_id = db.Column(db.Integer)
+
+    conclusion = db.relationship("Conclusion")
+    premise = db.relationship('Premise')
+    children = db.relationship("PremiseNode")
+
 
 class Premise(db.Model, SerializedModel):
     __tablename__ = "premise"
-    __table_args__ = {'schema': 'apella'}
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.now, index=True)
@@ -94,7 +109,6 @@ class Premise(db.Model, SerializedModel):
 
 class Source(db.Model, SerializedModel):
     __tablename__ = "source"
-    __table_args__ = {'schema': 'apella'}
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.now, index=True)
@@ -113,7 +127,6 @@ class Source(db.Model, SerializedModel):
 
 class Objection(db.Model, SerializedModel):
     __tablename__ = "objection"
-    __table_args__ = {'schema': 'apella'}
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     date_created = db.Column(db.DateTime, default=datetime.now, index=True)
