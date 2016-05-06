@@ -57,7 +57,7 @@ export default class ArgumentTree extends Component {
       <div id="argument_tree" style={{position:"relative", width:"100%"}}>
         {nestComments(this.props.premises).map((premise) => {
             return (
-              <Premise premise={premise} />
+              <Premise premise={premise} key={premise.premise_id} />
             )
           }
         )

@@ -44,7 +44,6 @@ def parse_args(args):
     pass
 
 
-
 class ProposalResource(Resource):
     def get(self, proposal_id=None):
         if proposal_id:
@@ -81,6 +80,7 @@ class ProposalResource(Resource):
         db.session.flush()
         return proposal.as_dict()
 
+
 class PremiseResource(BaseResource):
     model_class = Premise
     model_name = "premise"
@@ -106,9 +106,12 @@ class PremiseResource(BaseResource):
 
         return current_model.as_dict()
 
+
 class PremiseNodeResource(BaseResource):
     model_class = PremiseNode
     model_name = "premise_node"
+    alternate_pk = "conclusion_id"
+    associated_objects = ["premise"]
 
     def get(self, conclusion_id):
         results = self.model_class.query.filter_by(conclusion_id=conclusion_id).all()
@@ -116,21 +119,24 @@ class PremiseNodeResource(BaseResource):
             abort(404, message="Object {} not found".format(id))
         # merged_results = [merge_two_dicts(result.as_dict(), result.premise.as_dict()) for result in results]
         # tree_results = create_tree(merged_results)
-        return [result.as_dict() for result in results]
+        return [result.as_dict(self.associated_objects) for result in results]
 
 class ConclusionResource(BaseResource):
     model_class = Conclusion
     model_name = "conclusion"
     associated_objects = ["premises"]
 
+
 class SourceResource(BaseResource):
     model_class = Source
     model_name = "source"
     associated_objects = ["premises"]
 
+
 class ObjectionResource(BaseResource):
     model_class = Objection
     model_name = "objection"
+
 
 api.add_resource(ProposalResource, '/proposal/<int:proposal_id>', '/proposal')
 api.add_resource(ConclusionResource, '/conclusion/<int:conclusion_id>', '/conclusion')

@@ -12,6 +12,7 @@ from apella import db
 class BaseResource(Resource):
     model_name = None
     model_class = None
+    alternate_pk = None
     associated_objects = []
 
     def get(self, id=None):
@@ -64,7 +65,10 @@ class SerializedModel(object):
         if associated_columns:
             for column in associated_columns:
                 attributes = getattr(self, column)
-                value[column] = [attribute.as_dict() for attribute in attributes]
+                try:
+                    value[column] = [attribute.as_dict() for attribute in attributes]
+                except TypeError:
+                    value[column] = attributes.as_dict()
         return value
 
     def from_dict(self, attributes):
