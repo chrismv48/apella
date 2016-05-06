@@ -1,7 +1,8 @@
-import json
-from sqlalchemy import ForeignKeyConstraint, UniqueConstraint
-from apella import db
 from datetime import datetime
+
+from sqlalchemy import ForeignKeyConstraint, UniqueConstraint
+
+from apella import db
 from base import SerializedModel
 
 

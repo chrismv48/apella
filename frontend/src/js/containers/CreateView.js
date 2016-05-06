@@ -18,7 +18,6 @@ class CreateView extends Component {
   };
 }
 
-
 function mapStateToProps({fetchingPremiseNodes,  premiseNodes, addingPremise}) {
   return {
     fetchingPremiseNodes,
@@ -29,7 +28,8 @@ function mapStateToProps({fetchingPremiseNodes,  premiseNodes, addingPremise}) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    addPremise: actions.addPremise
+    addPremise: actions.addPremise,
+    fetchPremises: actions.fetchPremiseNodes
   }, dispatch)
 }
 

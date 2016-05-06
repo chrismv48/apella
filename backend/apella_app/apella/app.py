@@ -1,10 +1,10 @@
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
-from apella import app, db
 from flask_restful import Resource, Api, abort
 from flask import request
-from apella.utils import create_tree, merge_two_dicts
-from models import User, Proposal, ProposalAction, Conclusion, Premise, Objection, Source, PremiseNode
+
+from apella import app, db
+from models import Proposal, Conclusion, Premise, Objection, Source, PremiseNode
 from base import BaseResource
 
 api = Api(app)

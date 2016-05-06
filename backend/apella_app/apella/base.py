@@ -1,10 +1,12 @@
 """Docstring goes here"""
+from datetime import datetime
+import json
+
 from flask_restful import Resource, abort
 from sqlalchemy.exc import IntegrityError
 from flask import request
+
 from apella import db
-from datetime import datetime
-import json
 
 
 class BaseResource(Resource):

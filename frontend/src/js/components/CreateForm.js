@@ -1,29 +1,9 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import Premise from './Premise'
+import ArgumentTree from './ArgumentTree'
 
 
-function nestComments(commentList) {
-  const commentMap = {};
-
-  // move all the comments into a map of id => comment
-  commentList.forEach(comment => commentMap[comment.premise_id] = comment);
-
-  // iterate over the comments again and correctly nest the children
-  commentList.forEach(comment => {
-    comment.children = [];
-    if(comment.parent_premise_id !== null) {
-      const parent = commentMap[comment.parent_premise_id];
-      parent.children = (parent.children || []);
-      parent.children.push(comment);
-    }
-  });
-
-  // filter the list to return a list of correctly nested comments
-  return commentList.filter(comment => {
-    return comment.parent_premise_id === null;
-  });
-}
 
 export default class CreateForm extends Component {
 
@@ -35,6 +15,10 @@ export default class CreateForm extends Component {
       parentPremiseId: null,
       premiseDescription: null
     };
+  }
+
+  componentWillMount() {
+    this.props.fetchPremises(1);
   }
 
   handlePremiseNameChange(premiseName) {
@@ -88,15 +72,7 @@ export default class CreateForm extends Component {
         </div>
         <button onClick={() => this.handleSubmit()}>Add Premise</button>
         <div>
-          <div>
-            {nestComments(this.props.premiseNodes).map((premise) => {
-              premise.depth = 0;
-              return (
-                <Premise key={premise.premise_id} premise={premise} depth={0}/>
-              );
-            })
-            }
-          </div>
+          <ArgumentTree premises={this.props.premiseNodes}/>
         </div>
       </div>
 
