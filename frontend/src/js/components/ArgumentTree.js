@@ -32,32 +32,33 @@ export default class ArgumentTree extends Component {
   }
 
   componentDidMount() {
-    console.log('component mounted');
     this.jsPlumbInstance.setContainer("argument_tree");
   }
 
   componentDidUpdate() {
-    this.props.premises.map((premise) => {
+    this.props.premiseNodes.forEach((premiseNode) => {
       console.log('generating connection');
-      this.jsPlumbInstance.draggable(premise.premise_id.toString());
-      return (
-        this.jsPlumbInstance.connect({
-          source: premise.premise_id.toString(),
-          target: premise.parent_premise_id ? premise.parent_premise_id.toString() : null,
-          anchor: ["Top", "Bottom"],
-          connector: "Straight",
-          endpoint: "Blank"
-        })
-      );
+      //this.jsPlumbInstance.draggable(premiseNode.premise_id.toString());
+      if (premiseNode.parent_premise_id) {
+        return (
+          this.jsPlumbInstance.connect({
+            source: premiseNode.parent_premise_id.toString(),
+            target: premiseNode.premise_id.toString(),
+            anchor: ["Top", "Bottom"],
+            connector: "Straight",
+            endpoint: "Blank"
+          })
+        )
+      }
     });
   }
 
   render() {
     return (
-      <div id="argument_tree" style={{position:"relative", width:"100%"}}>
-        {nestComments(this.props.premises).map((premise) => {
+      <div id="argument_tree" style={{position:"relative", top: -180}}>
+        {nestComments(this.props.premiseNodes).map((premiseNode) => {
             return (
-              <Premise premise={premise} key={premise.premise_id} />
+              <Premise premiseNode={premiseNode} key={premiseNode.premise_id} deletePremise={this.props.deletePremise}/>
             )
           }
         )

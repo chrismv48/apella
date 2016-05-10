@@ -9,58 +9,58 @@ export const setSortOption = (sortOption) => {
 };
 
 // thunk async action
-export const fetchProposals = () => {
-  console.log('fetchProposals');
+export const fetchArguments = () => {
+  console.log('fetchArguments');
   return (dispatch) => {
-    const url = 'http://127.0.0.1:5000/proposal';
-    dispatch(fetchingProposals());
+    const url = 'http://127.0.0.1:5000/argument';
+    dispatch(fetchingArguments());
     return makeApiRequest(url)
-      .then((responseJson) => dispatch(receiveProposals(responseJson)))
+      .then((responseJson) => dispatch(receiveArguments(responseJson)))
   }
 };
 
-export const fetchingProposals = () => {
-  console.log('fetching Proposals');
+export const fetchingArguments = () => {
+  console.log('fetching Arguments');
   return {
     type: actions.FETCHING_PROPOSALS
   }
 };
 
-export const receiveProposals = (responseJson) => {
-  console.log('receiving Proposals');
+export const receiveArguments = (responseJson) => {
+  console.log('receiving Arguments');
   return {
     type: actions.RECEIVE_PROPOSALS,
-    proposals: responseJson
+    arguments_: responseJson['argument']
   }
 };
 
-export const fetchProposal = (proposalId) => {
-  console.log('fetchProposals');
+export const fetchArgument = (argumentId) => {
+  console.log('fetchArguments');
   return (dispatch) => {
-    const url = `http://127.0.0.1:5000/proposal/${proposalId}`;
-    dispatch(fetchingProposal());
+    const url = `http://127.0.0.1:5000/argument/${argumentId}`;
+    dispatch(fetchingArgument());
     return makeApiRequest(url)
-      .then((responseJson) => dispatch(receiveProposal(responseJson)))
+      .then((responseJson) => dispatch(receiveArgument(responseJson)))
   }
 };
 
-export const fetchingProposal = () => {
-  console.log('fetching Proposals');
+export const fetchingArgument = () => {
+  console.log('fetching Arguments');
   return {
     type: actions.FETCHING_PROPOSAL
   }
 };
 
-export const receiveProposal = (responseJson) => {
-  console.log('receiving Proposals');
+export const receiveArgument = (responseJson) => {
+  console.log('receiving Arguments');
   return {
     type: actions.RECEIVE_PROPOSAL,
-    selectedProposal: responseJson
+    selectedArgument: responseJson
   }
 };
 
 export const makeApiRequest = (url, method = 'get', data = null) => {
-  console.log(`requesting: ${url}`);
+  console.log(`requesting: ${method}: ${url}`);
   return fetch(url, {
     method,
     headers: {
@@ -110,6 +110,18 @@ export const addedPremise = () => {
   }
 };
 
+export const deletingPremise = () => {
+  return {
+    type: actions.DELETING_PREMISE
+  }
+};
+
+export const deletedPremise = () => {
+  return {
+    type: actions.DELETED_PREMISE
+  }
+};
+
 export const addPremise = (premiseData) => {
   const data = {
     conclusion_id: premiseData.conclusionId,
@@ -124,5 +136,16 @@ export const addPremise = (premiseData) => {
     return makeApiRequest(url, 'post', data)
       .then(dispatch(addedPremise()))
       .then(dispatch(fetchPremiseNodes(premiseData.conclusionId)))
+  }
+};
+
+export const deletePremise = (premiseId, conclusionId) => {
+
+  return (dispatch) => {
+    dispatch(deletingPremise());
+    const url = `http://127.0.0.1:5000/premise/${premiseId}`;
+    return makeApiRequest(url, 'delete')
+      .then(dispatch(deletedPremise()))
+      .then(dispatch(fetchPremiseNodes(conclusionId)))
   }
 };

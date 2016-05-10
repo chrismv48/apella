@@ -4,7 +4,7 @@ from flask_restful import Resource, Api, abort
 from flask import request
 
 from apella import app, db
-from models import Proposal, Conclusion, Premise, Objection, Source, PremiseNode
+from models import Proposal, Argument, Premise, Objection, Source, ArgumentPremise
 from base import BaseResource
 
 api = Api(app)
@@ -84,11 +84,11 @@ class ProposalResource(Resource):
 class PremiseResource(BaseResource):
     model_class = Premise
     model_name = "premise"
-    associated_objects = ["conclusions", "sources"]
+    associated_objects = ["arguments", "sources"]
 
     def post(self):
         parent_premise_id = request.json.pop("parent_premise_id", None)
-        conclusion_id = request.json.pop("conclusion_id", None)
+        argument_id = request.json.pop("argument_id", None)
         current_model = self.model_class(**request.json)
         db.session.add(current_model)
 
@@ -98,32 +98,32 @@ class PremiseResource(BaseResource):
             db.session.rollback()
             return abort(404, message="{} already exists: {}".format(self.model_name, e.message))
 
-        if parent_premise_id or conclusion_id:
-            db.session.add(PremiseNode(premise_id=current_model.id,
+        if parent_premise_id or argument_id:
+            db.session.add(ArgumentPremise(premise_id=current_model.id,
                                        parent_premise_id=parent_premise_id,
-                                       conclusion_id=conclusion_id))
+                                       argument_id=argument_id))
             db.session.commit()
 
         return current_model.as_dict()
 
 
-class PremiseNodeResource(BaseResource):
-    model_class = PremiseNode
-    model_name = "premise_node"
-    alternate_pk = "conclusion_id"
+class ArgumentPremiseResource(BaseResource):
+    model_class = ArgumentPremise
+    model_name = "argument_premise"
+    alternate_pk = "argument_id"
     associated_objects = ["premise"]
 
-    def get(self, conclusion_id):
-        results = self.model_class.query.filter_by(conclusion_id=conclusion_id).all()
+    def get(self, id):
+        results = self.model_class.query.filter_by(argument_id=id).all()
         if not results:
             abort(404, message="Object {} not found".format(id))
         # merged_results = [merge_two_dicts(result.as_dict(), result.premise.as_dict()) for result in results]
         # tree_results = create_tree(merged_results)
         return [result.as_dict(self.associated_objects) for result in results]
 
-class ConclusionResource(BaseResource):
-    model_class = Conclusion
-    model_name = "conclusion"
+class ArgumentResource(BaseResource):
+    model_class = Argument
+    model_name = "argument"
     associated_objects = ["premises"]
 
 
@@ -138,12 +138,12 @@ class ObjectionResource(BaseResource):
     model_name = "objection"
 
 
-api.add_resource(ProposalResource, '/proposal/<int:proposal_id>', '/proposal')
-api.add_resource(ConclusionResource, '/conclusion/<int:conclusion_id>', '/conclusion')
-api.add_resource(PremiseResource, '/premise/<int:premise_id>', '/premise')
-api.add_resource(PremiseNodeResource, '/premise_node/<int:conclusion_id>')
-api.add_resource(SourceResource, '/source/<int:source_id>', '/source')
-api.add_resource(ObjectionResource, '/objection/<int:objection_id>', '/objection')
+api.add_resource(ProposalResource, '/proposal/<int:id>', '/proposal')
+api.add_resource(ArgumentResource, '/argument/<int:id>', '/argument')
+api.add_resource(PremiseResource, '/premise/<int:id>', '/premise')
+api.add_resource(ArgumentPremiseResource, '/argument_premise/<int:id>')
+api.add_resource(SourceResource, '/source/<int:id>', '/source')
+api.add_resource(ObjectionResource, '/objection/<int:id>', '/objection')
 
 if __name__ == '__main__':
     app.run(debug=True)

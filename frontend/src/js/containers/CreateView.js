@@ -1,4 +1,4 @@
-//TODO: consider making this a dumb component and inheriting stuff from ProposalsView
+//TODO: consider making this a dumb component and inheriting stuff from ArgumentsView
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -29,7 +29,8 @@ function mapStateToProps({fetchingPremiseNodes,  premiseNodes, addingPremise}) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addPremise: actions.addPremise,
-    fetchPremises: actions.fetchPremiseNodes
+    fetchPremises: actions.fetchPremiseNodes,
+    deletePremise: actions.deletePremise
   }, dispatch)
 }
 

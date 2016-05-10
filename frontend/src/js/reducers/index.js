@@ -1,13 +1,14 @@
 import * as actions from '../actions/action_constants'
 
 const initialState = {
-  proposals: [],
-  selectedProposal: {},
-  fetchingProposals: false,
-  fetchingProposal: false,
+  arguments_: [],
+  selectedArgument: {},
+  fetchingArguments: false,
+  fetchingArgument: false,
   fetchingPremiseNodes: false,
   premiseNodes: [],
-  addingPremise: false
+  addingPremise: false,
+  deletingPremise: false
 };
 
 const appReducer = (state = initialState, action) => {
@@ -16,24 +17,24 @@ const appReducer = (state = initialState, action) => {
     case actions.FETCHING_PROPOSALS:
       return {
         ...state,
-        fetchingProposals: true
+        fetchingArguments: true
       };
     case actions.RECEIVE_PROPOSALS:
       return {
         ...state,
-        proposals: action.proposals,
-        fetchingProposals: false
+        arguments_: action.arguments_,
+        fetchingArguments: false
       };
     case actions.FETCHING_PROPOSAL:
       return {
         ...state,
-        fetchingProposal: true
+        fetchingArgument: true
       };
     case actions.RECEIVE_PROPOSAL:
       return {
         ...state,
-        selectedProposal: action.selectedProposal,
-        fetchingProposal: false
+        selectedArgument: action.selectedArgument,
+        fetchingArgument: false
       };
     case actions.FETCHING_PREMISE_NODES:
       return {
@@ -55,6 +56,16 @@ const appReducer = (state = initialState, action) => {
       return {
         ...state,
         addingPremise: false
+      };
+    case actions.DELETING_PREMISE:
+      return {
+        ...state,
+        deletingPremise: true
+      };
+    case actions.DELETED_PREMISE:
+      return {
+        ...state,
+        deletingPremise: false
       };
     default:
       return state

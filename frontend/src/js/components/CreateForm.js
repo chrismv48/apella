@@ -4,7 +4,6 @@ import Premise from './Premise'
 import ArgumentTree from './ArgumentTree'
 
 
-
 export default class CreateForm extends Component {
 
   constructor() {
@@ -40,6 +39,7 @@ export default class CreateForm extends Component {
   }
 
   handleSubmit() {
+    console.log('handle submit');
     const {premiseName, parentPremiseId, premiseDescription} = this.state;
     this.props.addPremise({
       premiseName,
@@ -70,9 +70,11 @@ export default class CreateForm extends Component {
             name="premise-description"
             onChange={(e) => this.handlePremiseDescriptionChange(e.target.value)}/>
         </div>
-        <button onClick={() => this.handleSubmit()}>Add Premise</button>
         <div>
-          <ArgumentTree premises={this.props.premiseNodes}/>
+          <button onClick={() => this.handleSubmit()}>Add Premise</button>
+        </div>
+        <div>
+          <ArgumentTree premiseNodes={this.props.premiseNodes} deletePremise={this.props.deletePremise}/>
         </div>
       </div>
 

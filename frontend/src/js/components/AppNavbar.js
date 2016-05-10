@@ -14,7 +14,7 @@ const AppNavbar = () => (
       </Navbar.Header>
       <Navbar.Collapse>
         <Nav>
-          <LinkContainer to="/my-proposals"><NavItem eventKey={1}>My Proposals</NavItem></LinkContainer>
+          <LinkContainer to="/my-arguments"><NavItem eventKey={1}>My Arguments</NavItem></LinkContainer>
           <LinkContainer to="/faq"><NavItem eventKey={2} href="faq">FAQ</NavItem></LinkContainer>
           <LinkContainer to="/donate"><NavItem eventKey={3} href="donate">Donate</NavItem></LinkContainer>
         </Nav>

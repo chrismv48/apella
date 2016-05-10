@@ -48,50 +48,50 @@ class ProposalAction(db.Model, SerializedModel):
     proposal = db.relationship('Proposal', backref=db.backref('proposal_action'))
     user = db.relationship('User', backref=db.backref('proposal_action'))
 
-conclusion_premise = db.Table('conclusion_premise',
-                              db.Column('conclusion_id', db.Integer, db.ForeignKey('conclusion.id')),
-                              db.Column('premise_id', db.Integer, db.ForeignKey('premise.id')),
-                              )
+
+argument_premise = db.Table('argument_premise',
+                            db.Column('argument_id', db.Integer, db.ForeignKey('argument.id')),
+                            db.Column('premise_id', db.Integer, db.ForeignKey('premise.id')),
+                            )
 
 source_premise = db.Table('source_premise',
                           db.Column('source_id', db.Integer, db.ForeignKey('source.id')),
                           db.Column('premise_id', db.Integer, db.ForeignKey('premise.id')),
                           )
 
-class Conclusion(db.Model, SerializedModel):
-    __tablename__ = "conclusion"
+
+class Argument(db.Model, SerializedModel):
+    __tablename__ = "argument"
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    date_created = db.Column(db.DateTime, default=datetime.now, index=True)
     title = db.Column(db.String)
     description = db.Column(db.String)
+    snippet = db.Column(db.String)
     supporters = db.Column(db.Integer, index=True)
     detractors = db.Column(db.Integer)
     followers = db.Column(db.Integer)
-    status = db.Column(db.String, index=True)
+    status = db.Column(db.String)
 
-    premises = db.relationship('Premise',
-                               secondary=conclusion_premise,
-                               backref=db.backref('conclusions', lazy='dynamic'))
 
-class PremiseNode(db.Model, SerializedModel):
-    __tablename__ = "premise_node"
+class ArgumentPremise(db.Model, SerializedModel):
+    __tablename__ = "argument_premise"
     __table_args__ = (
         ForeignKeyConstraint(
-            ['conclusion_id', 'parent_premise_id'],
-            ['premise_node.conclusion_id', 'premise_node.premise_id']
+            ['argument_id', 'parent_premise_id'],
+            ['argument_premise.argument_id', 'argument_premise.premise_id']
         ),
-        UniqueConstraint('conclusion_id', 'premise_id', name='foo')
+        UniqueConstraint('argument_id', 'premise_id', name='foo'),
+        {'extend_existing': True}  # not sure why I need this, but this model seems to be getting declared twice?
     )
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    conclusion_id = db.Column(db.Integer, db.ForeignKey('conclusion.id'))
+    argument_id = db.Column(db.Integer, db.ForeignKey('argument.id'))
     premise_id = db.Column(db.Integer, db.ForeignKey('premise.id'))
     parent_premise_id = db.Column(db.Integer)
 
-    conclusion = db.relationship("Conclusion")
-    premise = db.relationship('Premise')
-    children = db.relationship("PremiseNode")
+    argument = db.relationship("Argument")
+    premise = db.relationship('Premise', backref=db.backref('ArgumentPremise', cascade="all, delete-orphan"))
+    children = db.relationship("ArgumentPremise")
 
 
 class Premise(db.Model, SerializedModel):
@@ -105,7 +105,6 @@ class Premise(db.Model, SerializedModel):
     detractors = db.Column(db.Integer)
     followers = db.Column(db.Integer)
     status = db.Column(db.String)
-
 
 
 class Source(db.Model, SerializedModel):
@@ -136,7 +135,7 @@ class Objection(db.Model, SerializedModel):
     type = db.Column(db.String, index=True)
     source_id = db.Column(db.Integer, default=None, index=True)
     premise_id = db.Column(db.Integer, default=None, index=True)
-    conclusion_id = db.Column(db.Integer, default=None, index=True)
+    argument_id = db.Column(db.Integer, default=None, index=True)
     supporters = db.Column(db.Integer, index=True)
     detractors = db.Column(db.Integer)
     followers = db.Column(db.Integer)

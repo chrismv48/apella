@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, ButtonToolbar, Row, Col } from 'react-bootstrap'
 
-const ProposalSortButtons = ({ sortOption, onSetSortOption, props }) => (
+const ArgumentSortButtons = ({ sortOption, onSetSortOption, props }) => (
 
-  <div className="userProposalFilter">
+  <div className="userArgumentFilter">
     <span>
       <ButtonToolbar>
         <Button bsStyle="primary"
@@ -23,4 +23,4 @@ const ProposalSortButtons = ({ sortOption, onSetSortOption, props }) => (
   </div>
 );
 
-export default ProposalSortButtons;
+export default ArgumentSortButtons;

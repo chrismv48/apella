@@ -45,6 +45,14 @@ class BaseResource(Resource):
         finally:
             db.session.rollback()
 
+    def delete(self, id):
+        current_model = self.model_class.query.get(id)
+        if not current_model:
+            abort(404, message="Object {} not found".format(id))
+        db.session.delete(current_model)
+        db.session.commit()
+        return current_model.as_dict()
+
 
 class SerializedModel(object):
     """A SQLAlchemy model mixin class that can serialize itself as JSON."""
