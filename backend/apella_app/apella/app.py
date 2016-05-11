@@ -124,7 +124,6 @@ class ArgumentPremiseResource(BaseResource):
 class ArgumentResource(BaseResource):
     model_class = Argument
     model_name = "argument"
-    associated_objects = ["premises"]
 
 
 class SourceResource(BaseResource):
