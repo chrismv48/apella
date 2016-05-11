@@ -45,7 +45,7 @@ export default class CreateForm extends Component {
       premiseName,
       parentPremiseId,
       premiseDescription,
-      conclusionId: 1
+      argumentId: 1
     })
   }
 

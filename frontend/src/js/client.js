@@ -8,7 +8,7 @@ import appReducer from './reducers/index'
 import App from './components/App'
 import ArgumentsView from './components/ArgumentsView'
 import ArgumentView from './components/ArgumentView'
-import CreateView from './containers/CreateView'
+import CreateArgument from './components/CreateArgument'
 
 const finalCreateStore = compose(
   applyMiddleware(thunk),
@@ -23,7 +23,7 @@ render(
         <IndexRoute component={ArgumentsView}/>
         <Route path="/arguments" component={ArgumentsView}/>
         <Route path="/argument/:argumentId" component={ArgumentView}/>
-        <Route path="/create" component={CreateView}/>
+        <Route path="/create-argument" component={CreateArgument}/>
         <Route path="/argument" component={ArgumentView}>
           <Route path="*" component={ArgumentView}/>
         </Route>

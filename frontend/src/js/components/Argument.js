@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router'
 
+//noinspection JSUnresolvedVariable
 const Argument = (argument_) => (
   <div className="media" id="argument_">
     <div className="media-left">
       <span>{argument_.supporters}</span>
     </div>
     <div className="media-body">
-      <Link to={`/argument_/${argument_.id}`}>
+      <Link to={`/argument/${argument_.id}`}>
         <h4 className="media-heading">{argument_.title}</h4>
       </Link>
       {argument_.description}

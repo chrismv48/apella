@@ -34,7 +34,7 @@ const Premise = ({ premiseNode, depth=0, width="100%", left="0%", deletePremise 
             ({premiseNode.premise_id} - {premiseNode.parent_premise_id})
             {premiseNode.premise.description}
           </div>
-          <div style={{float:"right"}} onClick={() => deletePremise(premiseNode.premise_id, premiseNode.conclusion_id)}>
+          <div style={{float:"right"}} onClick={() => deletePremise(premiseNode.premise_id, premiseNode.argument_id)}>
             Delete
           </div>
         </Panel>

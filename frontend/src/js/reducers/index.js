@@ -1,4 +1,10 @@
-import * as actions from '../actions/action_constants'
+import * as argumentActions from '../actions/argument'
+import * as premiseActions from '../actions/premise'
+import * as premiseNodeActions from '../actions/premiseNode'
+
+import premiseReducer from './premiseReducer'
+import argumentReducer from './argumentReducer'
+import premiseNodeReducer from './premiseNodeReducer'
 
 const initialState = {
   arguments_: [],
@@ -8,65 +14,28 @@ const initialState = {
   fetchingPremiseNodes: false,
   premiseNodes: [],
   addingPremise: false,
-  deletingPremise: false
+  deletingPremise: false,
+  addingArgument: false
 };
 
 const appReducer = (state = initialState, action) => {
   console.log(action);
   switch (action.type) {
-    case actions.FETCHING_PROPOSALS:
-      return {
-        ...state,
-        fetchingArguments: true
-      };
-    case actions.RECEIVE_PROPOSALS:
-      return {
-        ...state,
-        arguments_: action.arguments_,
-        fetchingArguments: false
-      };
-    case actions.FETCHING_PROPOSAL:
-      return {
-        ...state,
-        fetchingArgument: true
-      };
-    case actions.RECEIVE_PROPOSAL:
-      return {
-        ...state,
-        selectedArgument: action.selectedArgument,
-        fetchingArgument: false
-      };
-    case actions.FETCHING_PREMISE_NODES:
-      return {
-        ...state,
-        fetchingPremiseNodes: true
-      };
-    case actions.RECEIVE_PREMISE_NODES:
-      return {
-        ...state,
-        premiseNodes: action.premiseNodes,
-        fetchingPremiseNodes: false
-      };
-    case actions.ADDING_PREMISE:
-      return {
-        ...state,
-        addingPremise: true
-      };
-    case actions.ADDED_PREMISE:
-      return {
-        ...state,
-        addingPremise: false
-      };
-    case actions.DELETING_PREMISE:
-      return {
-        ...state,
-        deletingPremise: true
-      };
-    case actions.DELETED_PREMISE:
-      return {
-        ...state,
-        deletingPremise: false
-      };
+    case argumentActions.FETCHING_ARGUMENTS:
+    case argumentActions.RECEIVE_ARGUMENTS:
+    case argumentActions.FETCHING_ARGUMENT:
+    case argumentActions.ADDING_ARGUMENT:
+    case argumentActions.ADDED_ARGUMENT:
+    case argumentActions.RECEIVE_ARGUMENT:
+      return argumentReducer(state, action);
+    case premiseNodeActions.FETCHING_PREMISE_NODES:
+    case premiseNodeActions.RECEIVE_PREMISE_NODES:
+      return premiseNodeReducer(state, action);
+    case premiseActions.ADDING_PREMISE:
+    case premiseActions.ADDED_PREMISE:
+    case premiseActions.DELETING_PREMISE:
+    case premiseActions.DELETED_PREMISE:
+      return premiseReducer(state, action);
     default:
       return state
   }

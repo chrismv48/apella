@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchArgument } from '../actions/index'
+import { fetchArgument } from '../actions/argument'
 
 class ArgumentView extends Component {
 

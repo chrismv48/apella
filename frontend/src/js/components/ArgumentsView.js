@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import ArgumentList from '../containers/ArgumentList'
 import { PageHeader } from 'react-bootstrap'
-import { fetchArguments } from '../actions/index'
+import { fetchArguments } from '../actions/argument'
 
 
 class ArgumentsView extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchArguments();
   }
 

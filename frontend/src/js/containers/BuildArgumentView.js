@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import CreateForm from '../components/CreateForm'
+import CreateForm from '../components/CreatePremiseForm'
 import * as actions from '../actions/index';
 
 class CreateView extends Component {
